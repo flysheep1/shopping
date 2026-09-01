@@ -1,9 +1,11 @@
 <script setup>
 import { reactive, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useUserStore } from '../stores/user';
+import { useCartStore } from '../stores/cart';
 
 const router = useRouter();
+const route = useRoute();
 const store = useUserStore();
 
 const form = reactive({ username: '', password: '' });
@@ -19,7 +21,8 @@ async function onSubmit() {
   loading.value = true;
   try {
     await store.doLogin({ ...form });
-    router.push('/profile');
+    useCartStore().refresh();
+    router.push(route.query.redirect || '/shop');
   } catch (e) {
     error.value = e.message;
   } finally {

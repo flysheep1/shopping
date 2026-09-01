@@ -38,7 +38,7 @@ async function onSubmit() {
       nickname: form.nickname,
       email: form.email,
     });
-    router.push('/profile');
+    router.push('/shop');
   } catch (e) {
     error.value = e.message;
   } finally {

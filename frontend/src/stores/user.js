@@ -20,6 +20,10 @@ export const useUserStore = defineStore('user', () => {
     localStorage.removeItem('token');
   }
 
+  function setUser(u) {
+    user.value = u;
+  }
+
   async function doLogin(payload) {
     const data = await api.login(payload);
     setToken(data.token);
@@ -41,10 +45,9 @@ export const useUserStore = defineStore('user', () => {
     return data.user;
   }
 
-  async function addPoints(amount) {
-    const data = await api.addPoints(amount);
-    user.value = data.user;
-    return data.user;
+  // 用接口返回的最新用户对象同步本地状态（签到/下单等操作后调用）
+  function syncUser(u) {
+    if (u) user.value = u;
   }
 
   function logout() {
@@ -59,7 +62,8 @@ export const useUserStore = defineStore('user', () => {
     doLogin,
     doRegister,
     fetchProfile,
-    addPoints,
+    syncUser,
+    setUser,
     logout,
   };
 });
